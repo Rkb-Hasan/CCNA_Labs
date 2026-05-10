@@ -19,4 +19,4 @@ Introduction with basic network components like - End devices, Switch, Router, F
 
 ## 🖧 Topology
 
-![Lab_Pic](Lab-1.png)
+![Lab_Pic](../Basic%20Network%20Components/Lab-1.png)
