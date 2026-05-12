@@ -1,4 +1,4 @@
-# Day 01 — TCP/IP Model, Encapsulation & Decapsulation
+# TCP/IP Model, Encapsulation & Decapsulation
 
 **Date:** 2026-05-12 | **Module:** Network Fundamentals | **Simulator:** Packet Tracer
 
@@ -15,15 +15,30 @@ by capturing a DHCP release/renew exchange from a PC to a DHCP server.
 
 ### The TCP/IP Layers
 
+TCP stands for Transmission Control Protocol and IP stands for Internet Protocol. The TCP/IP model is named after its two most crucial protocols.
+
 | Layer | Name                  | PDU Name                       | Example Protocols                    |
 | ----- | --------------------- | ------------------------------ | ------------------------------------ |
 | 5     | Application           | Data                           | HTTP, DNS, DHCP, FTP                 |
 | 4     | Transport             | Segment (TCP) / Datagram (UDP) | TCP, UDP                             |
 | 3     | Network (Internet)    | Packet                         | IP, ICMP                             |
-| 2     | Network Access (Link) | Frame                          | Ethernet, Wi-Fi                      |
+| 2     | Network Access (Link) | Frame                          | Ethernet(802.3), Wi-Fi(802.11)       |
 | 1     | Physical              | Bits                           | Copper Cables, Optic or Radio Signal |
 
 > Note: PDU = Protocol Data Unit — the name given to data at each specific layer.
+
+---
+
+### What is a Protocol?
+
+A protocol is a **set of rules** that defines how two devices at the same layer communicate.
+
+- Protocols define: message format, what actions to take, order of messages
+- Examples per layer:
+  - Application → DHCP defines how a client requests an IP address
+  - Transport → UDP defines connectionless delivery (used by DHCP)
+  - Network → IP defines addressing and routing
+  - Network Access → Ethernet defines MAC addressing and framing
 
 ---
 
@@ -34,7 +49,7 @@ Each layer takes the data from the layer above and **wraps it with its own heade
 - The process of adding headers going down is called **encapsulation**
 - The final product that goes onto the wire are **bits**
 
----
+![Encapsulation](Encapsulation.png)
 
 ### Decapsulation (Receiving side — going UP the layers)
 
@@ -44,6 +59,8 @@ The receiving device strips each header as data moves up the stack.
 - Network layer reads & removes the IP header → passes Segment up
 - Transport layer reads & removes TCP/UDP header → passes Data up
 - Application layer reads the raw data
+
+  ![Decapsulate](Decapsulate.png)
 
 ---
 
@@ -71,19 +88,6 @@ This is the **logical communication between the same layer on two different devi
 
 ---
 
-### What is a Protocol?
-
-A protocol is a **set of rules** that defines how two devices at the same layer communicate.
-
-- Protocols define: message format, what actions to take, order of messages
-- Examples per layer:
-  - Application → DHCP defines how a client requests an IP address
-  - Transport → UDP defines connectionless delivery (used by DHCP)
-  - Network → IP defines addressing and routing
-  - Network Access → Ethernet defines MAC addressing and framing
-
----
-
 ### What is a Hop?
 
 A **hop** is each router (or L3 device) a packet passes through on its way to the destination. Switches are not counted as hops because it only forwards frames inside a Local Network.
@@ -91,6 +95,8 @@ A **hop** is each router (or L3 device) a packet passes through on its way to th
 - At every hop, the Network Access layer header is **stripped and rebuilt** with new source/destination MAC addresses
 - The IP header (Network layer) stays the same end-to-end — only MACs change hop-to-hop
 - This is why IP addresses identify endpoints, while MAC addresses only matter per-segment
+
+![Hop](image.png)
 
 ---
 
