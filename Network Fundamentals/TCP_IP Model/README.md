@@ -2,8 +2,6 @@
 
 **Date:** 2026-05-12 | **Module:** Network Fundamentals | **Simulator:** Packet Tracer
 
----
-
 ## Objective
 
 Understand how data is encapsulated layer by layer in the TCP/IP model and observe each layer's PDU
@@ -27,8 +25,6 @@ TCP stands for Transmission Control Protocol and IP stands for Internet Protocol
 
 > Note: PDU = Protocol Data Unit — the name given to data at each specific layer.
 
----
-
 ### What is a Protocol?
 
 A protocol is a **set of rules** that defines how two devices at the same layer communicate.
@@ -39,8 +35,6 @@ A protocol is a **set of rules** that defines how two devices at the same layer 
   - Transport → UDP defines connectionless delivery (used by DHCP)
   - Network → IP defines addressing and routing
   - Network Access → Ethernet defines MAC addressing and framing
-
----
 
 ### Encapsulation (Sending side — going DOWN the layers)
 
@@ -62,8 +56,6 @@ The receiving device strips each header as data moves up the stack.
 
   ![Decapsulate](Decapsulate.png)
 
----
-
 ### Adjacent Layer Interaction
 
 This is communication **between two different layers on the same device**.
@@ -73,8 +65,6 @@ This is communication **between two different layers on the same device**.
 - Example: the Transport layer hands a Segment down to the Network layer, which wraps it into a Packet
 
 > Think of it as a chain of service: every layer is both a customer (to the layer below) and a provider (to the layer above).
-
----
 
 ### Same Layer Interaction
 
