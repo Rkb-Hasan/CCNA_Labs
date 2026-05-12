@@ -96,7 +96,7 @@ A **hop** is each router (or L3 device) a packet passes through on its way to th
 - The IP header (Network layer) stays the same end-to-end — only MACs change hop-to-hop
 - This is why IP addresses identify endpoints, while MAC addresses only matter per-segment
 
-![Hop](image.png)
+![Hop](hop.png)
 
 ---
 
