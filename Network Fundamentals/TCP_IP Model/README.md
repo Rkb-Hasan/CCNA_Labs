@@ -100,7 +100,7 @@ A **hop** is each router (or L3 device) a packet passes through on its way to th
 
 ---
 
-## 🖧 Lab — Observing PDUs with DHCP Release/Renew
+## 🖧 Lab — Observing each layer's PDUs with DHCP Release/Renew commands
 
 ### Topology
 
@@ -108,7 +108,7 @@ A **hop** is each router (or L3 device) a packet passes through on its way to th
 
 ### Lab Goal
 
-Use `ipconfig /release` and `ipconfig /renew` on a PC and observe the PDU details at each layer
+Used `ipconfig /release` and `ipconfig /renew` on a PC and observe the PDU details at each layer
 in Packet Tracer's simulation mode.
 
 <!-- ### Why DHCP for this lab?
