@@ -43,7 +43,7 @@ Each layer takes the data from the layer above and **wraps it with its own heade
 - The process of adding headers going down is called **encapsulation**
 - The final product that goes onto the wire are **bits**
 
-![Encapsulation](Encapsulation.png)
+![Encapsulation](../TCP_IP%20Model/images/Encapsulation.png)
 
 ### Decapsulation (Receiving side — going UP the layers)
 
@@ -54,7 +54,7 @@ The receiving device strips each header as data moves up the stack.
 - Transport layer reads & removes TCP/UDP header → passes Data up
 - Application layer reads the raw data
 
-  ![Decapsulate](Decapsulate.png)
+  ![Decapsulate](../TCP_IP%20Model/images/Decapsulate.png)
 
 ### Adjacent Layer Interaction
 
@@ -86,7 +86,7 @@ A **hop** is each router (or L3 device) a packet passes through on its way to th
 - The IP header (Network layer) stays the same end-to-end — only MACs change hop-to-hop
 - This is why IP addresses identify endpoints, while MAC addresses only matter per-segment
 
-![Hop](hop.png)
+![Hop](../TCP_IP%20Model/images/hop.png)
 
 ---
 
@@ -94,7 +94,7 @@ A **hop** is each router (or L3 device) a packet passes through on its way to th
 
 ### Topology
 
-![topology](TCP_IP.png)
+![topology](../TCP_IP%20Model/images/TCP_IP.png)
 
 ### Lab Goal
 
