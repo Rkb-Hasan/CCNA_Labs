@@ -1,4 +1,4 @@
-# Day 01 — Basic Network Components
+# Basic Network Components
 
 **Date:** 2026-05-09  
 **Module:** Network Fundamentals  

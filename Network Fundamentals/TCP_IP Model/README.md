@@ -13,7 +13,7 @@ by capturing a DHCP release/renew exchange from a PC to a DHCP server.
 
 ### The TCP/IP Layers
 
-TCP stands for Transmission Control Protocol and IP stands for Internet Protocol. The TCP/IP model is named after its two most crucial protocols.
+TCP stands for Transmission Control Protocol and IP stands for Internet Protocol. The TCP/IP model is named after its two most crucial protocols - TCP & IP.
 
 | Layer | Name                  | PDU Name                       | Example Protocols                    |
 | ----- | --------------------- | ------------------------------ | ------------------------------------ |

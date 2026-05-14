@@ -59,134 +59,75 @@ PuTTY receives the response
 PuTTY renders the CLI output on screen
 ```
 
-| Layer | Name                  | PDU Name                       | Example Protocols                    |
-| ----- | --------------------- | ------------------------------ | ------------------------------------ |
-| 5     | Application           | Data                           | HTTP, DNS, DHCP, FTP                 |
-| 4     | Transport             | Segment (TCP) / Datagram (UDP) | TCP, UDP                             |
-| 3     | Network (Internet)    | Packet                         | IP, ICMP                             |
-| 2     | Network Access (Link) | Frame                          | Ethernet(802.3), Wi-Fi(802.11)       |
-| 1     | Physical              | Bits                           | Copper Cables, Optic or Radio Signal |
+### Different Exec modes of Cisco CLI
 
-<!-- > Note: PDU = Protocol Data Unit — the name given to data at each specific layer.
+The Cisco Command Line Interface (CLI) uses a hierarchical structure where each mode provides access to a specific set of commands. Transitioning between these modes allows to view status information or modify specific device settings.
 
-### What is a Protocol?
+There are 3 primary operational modes :
 
-A protocol is a **set of rules** that defines how two devices at the same layer communicate.
+- User Exec Mode
+- Privileged Exec Mode
+- Global Configuration Mode
 
-- Protocols define: message format, what actions to take, order of messages
-- Examples per layer:
-  - Application → DHCP defines how a client requests an IP address
-  - Transport → UDP defines connectionless delivery (used by DHCP)
-  - Network → IP defines addressing and routing
-  - Network Access → Ethernet defines MAC addressing and framing
+Note : _exit_ commnad is used to exit the current Exec mode and move to the lower level of Exec.
 
-### Encapsulation (Sending side — going DOWN the layers)
+#### User Exec Mode
 
-Each layer takes the data from the layer above and **wraps it with its own header** (and sometimes a trailer).
-
-- The process of adding headers going down is called **encapsulation**
-- The final product that goes onto the wire are **bits**
-
-![Encapsulation](../TCP_IP%20Model/images/Encapsulation.png)
-
-### Decapsulation (Receiving side — going UP the layers)
-
-The receiving device strips each header as data moves up the stack.
-
-- Network Access layer reads & removes the Ethernet header/trailer → passes Packet up
-- Network layer reads & removes the IP header → passes Segment up
-- Transport layer reads & removes TCP/UDP header → passes Data up
-- Application layer reads the raw data
-
-  ![Decapsulate](../TCP_IP%20Model/images/Decapsulate.png)
-
-### Adjacent Layer Interaction
-
-This is communication **between two different layers on the same device**.
-
-- Each layer provides a **service** to the layer above it
-- Each layer uses the **service** of the layer below it
-- Example: the Transport layer hands a Segment down to the Network layer, which wraps it into a Packet
-
-> Think of it as a chain of service: every layer is both a customer (to the layer below) and a provider (to the layer above).
-
-### Same Layer Interaction
-
-This is the **logical communication between the same layer on two different devices**.
-
-- The Transport layer on PC1 "talks to" the Transport layer on the server — even though physically data passes through all layers
-- This is possible because each layer adds its own header which only the matching layer on the other side actually reads and processes
-- Example: PC1's IP layer sets the source/destination IP → the server's IP layer reads those fields
-
-> Same layer interaction is what makes **protocols** work — the rules two peers at the same layer agree on.
-
----
-
-### What is a Hop?
-
-A **hop** is each router (or L3 device) a packet passes through on its way to the destination. Switches are not counted as hops because it only forwards frames inside a Local Network.
-
-- At every hop, the Network Access layer header is **stripped and rebuilt** with new source/destination MAC addresses
-- The IP header (Network layer) stays the same end-to-end — only MACs change hop-to-hop
-- This is why IP addresses identify endpoints, while MAC addresses only matter per-segment
-
-![Hop](../TCP_IP%20Model/images/hop.png)
-
----
-
-## 🖧 Lab — Observing each layer's PDUs with DHCP Release/Renew commands
-
-### Topology
-
-![topology](../TCP_IP%20Model/images/TCP_IP.png)
-
-### Lab Goal
-
-Used `ipconfig /release` and `ipconfig /renew` on a PC and observe the PDU details at each layer
-in Packet Tracer's simulation mode.
-
-<!-- ### Why DHCP for this lab?
-
-DHCP uses **UDP** at the Transport layer (not TCP), which makes it a clean example because:
-
-- You see a connectionless exchange (no handshake overhead)
-- The broadcast nature shows how Network Access layer addressing works before an IP is assigned -->
-
-### What I observed
-
-| Layer          | PDU seen                                        | Header fields visible                        |
-| -------------- | ----------------------------------------------- | -------------------------------------------- |
-| Application    | DHCP message (DISCOVER / OFFER / REQUEST / ACK) | Message type, Client MAC                     |
-| Transport      | UDP Datagram                                    | Src port 68, Dst port 67                     |
-| Network        | IP Packet                                       | Src 0.0.0.0, Dst 255.255.255.255 (broadcast) |
-| Network Access | Ethernet Frame                                  | Src MAC (PC), Dst MAC FF:FF:FF:FF:FF:FF      |
-
-> DHCP DISCOVER uses 0.0.0.0 as source IP because the PC doesn't have one yet — the IP layer still
-> exists, it just uses a placeholder. This is a great example of same-layer interaction even before
-> a real address is assigned.
-
-### Commands used
+User Exec Mode is the initial "entry-point" when you log in. It is restricted to basic monitoring and viewing system status.
+This mode is denoted with ">" sign. _enable_ command is used in this mode to move to the next level (Privileged Exec Mode).
 
 ```bash
-PC> ipconfig /release
-PC> ipconfig /renew
+Router> enable
 ```
 
----
+#### Privileged Exec Mode
 
-## What I didn't fully understand
+Also known as Enable Mode, this level provides full access to all device commands and allows to view detailed configurations.
+This mode is denoted with "#" sign. _configure terminal or conf t_ command is used in this mode to move to the next level (Global Configuration Mode).
 
-- [ ] Why DHCP uses UDP instead of TCP — need to revisit connectionless vs connection-oriented
-- [ ] Exactly how the Ethernet trailer (FCS) works and what it checks
-- [ ] The full 4-step DHCP DORA process — only partially visible in this lab
+```bash
+Router#
+```
 
----
+#### Global Configuration Mode
 
-## Key Takeaways
+Used to define settings that apply to the entire device, such as the hostname or routing protocols.
+This mode is denoted with "(config)#" sign.
 
-- TCP/IP Model is not a Law, its a Standard to make communication Vendor neutral.
-- TCP/IP has 5 layers; each layer adds its own header going down (encapsulation) and strips it going up (decapsulation)
-- PDU names change per layer: Data → Segment/Datagram → Packet → Frame → Bits
-- **Adjacent layer interaction** = one device, two neighboring layers talking to each other
-- **Same layer interaction** = two devices, same layer communicating via a shared protocol
-- MAC addresses change at every hop; IP addresses stay constant end-to-end -->
+In this mode we can use _enable password_ or the _enable secret_ command for the user to restrict access to Privileged EXEC mode.
+
+**Enable password vs Enable Secret**
+
+Although both commands serve same purpose but the primary difference is security: _enable password_ stores credentials in plain text, whereas _enable secret_ uses strong, non-reversible cryptographic hashing (like MD5 or SHA-256). _Enable secret_ always overrides _enable password_ when both are configured.
+
+Although The _service password-encryption_ command can be used to encrypt plain-text passwords (like enable or line passwords) stored in the running and startup configurations. It uses a weak, proprietary algorithm (Type 7), which is designed to prevent casual "shoulder surfing" but can be easily reversed or decrypted by attackers.
+
+Note: we can use the _do_ command to execute Privileged EXEC mode commands (like show, clear, or debug) while still inside Global Configuration mode or any of its submodes.
+
+**Running Config vs Startup Config**
+
+Cisco IOS has 2 types of config file:
+
+- Running Config
+- startup-config
+
+The running-config is the active configuration currently stored in RAM. The startup-config is the saved configuration stored in NVRAM. Changes made to the running-config take effect immediately, but will be lost on reboot unless they are saved to the startup-config.
+
+| Feature         | Running Configuration (`running-config`)                                  | Startup Configuration (`startup-config`)                                     |
+| --------------- | ------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| Location        | RAM (Random Access Memory)                                                | NVRAM (Non-Volatile RAM)                                                     |
+| When it's used  | Actively applies settings and changes while the device is operating       | Loaded into RAM during the device boot-up sequence                           |
+| Persistency     | Temporary; disappears if power is lost or the device is rebooted          | Permanent; retains data even without power                                   |
+| Purpose         | To execute current network operations and test new configuration commands | To act as the permanent template that tells the router/switch how to boot up |
+| View Command    | `show running-config` or `show run`                                       | `show startup-config`                                                        |
+| Save Command    | `copy running-config startup-config`                                      | Receives saved data from running-config                                      |
+| Erase Command   | Cannot be directly erased separately                                      | `erase startup-config` or `write erase`                                      |
+| Reload Behavior | Lost after reload if not saved                                            | Loaded automatically during boot                                             |
+
+```bash
+Router(config)# enable password Plain Text password
+Router(config)# enable Secret Strong Secret password
+Router(config)# service password-encryption
+Router(config)# service password-encryption
+
+```
