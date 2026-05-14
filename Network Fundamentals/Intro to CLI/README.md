@@ -1,133 +1,227 @@
-# Intro to CLI & Basic Device Security
+# Lab 02 — Intro to CLI & Basic Device Security
 
-**Date:** 2026-05-13 | **Module:** Network Fundamentals | **Simulator:** Packet Tracer
-
-## Objective
-
-To learn the basic commands of CLI and implementing basic security e.g - enable password, enable secret etc.
+**Date:** 2026-05-13 | **Module:** Network Fundamentals | **Simulator:** Cisco Packet Tracer
 
 ---
 
-## Theory — CLI and it's different modes
+## What This Lab Covers
 
-### CLI, Console Port
+Getting hands-on with the Cisco CLI for the first time — navigating between exec modes, setting passwords, understanding how encryption works, and making sure configurations survive a reboot.
 
-CLI stands for command line interface, unlike the GUI(Graphics User Interface) in windows the CLI is text based command interface without any fancy graphics. It is text based and sometimes case sensitive.
+---
 
-For configuring Cisco Networking Components like - Routers or Switches, Cisco offers a CLI and an Operating system(Cisco IOS) for each components which can be accessed by connecting the console port with a PC or through remote connections.
+## Topology
 
-The console port can either be connected with a USB - B type cable or an Eathernet cable with a PC.
-![console](Images/console.png)
-
-### Terminal Emulator
-
-After connecting the console port with the PC we need a terminal emulator like PuTTy because most Cisco devices do not have a full graphical interface or built-in screen/keyboard system like a normal PC.
-
-Instead, they expose a CLI through ports such as:
-
-- Console port
-- SSH
-- Telnet
-- AUX port
-
-The terminal emulator sets up a bridge that lets your computer communicate with the Cisco devices as they only have CPU, RAM, Network interfaces, Operating System (IOS) with no monitor, mouse or desktop environment.
-
-```bash
-# Cisco CLI Communication Flow
-
-You type command
-        ↓
-PuTTY captures keystrokes
-        ↓
-PuTTY packages data using:
-    - Serial communication
-    - SSH
-    - Telnet
-        ↓
-Data travels to the router/switch
-        ↓
-Cisco IOS receives the characters
-        ↓
-IOS interprets the command
-        ↓
-IOS executes the requested operation
-        ↓
-IOS sends text output back
-        ↓
-PuTTY receives the response
-        ↓
-PuTTY renders the CLI output on screen
+```
+R1 ──── SW1 ──┬── PC1
+               ├── PC2
+               └── PC3
 ```
 
-### Different Exec modes of Cisco CLI
+A single router (R1) connected to a switch (SW1), which connects three end hosts. Simple setup — the focus here is on the devices themselves, not the network design.
 
-The Cisco Command Line Interface (CLI) uses a hierarchical structure where each mode provides access to a specific set of commands. Transitioning between these modes allows to view status information or modify specific device settings.
+---
 
-There are 3 primary operational modes :
+## Background — The Cisco CLI
 
-- User Exec Mode
-- Privileged Exec Mode
-- Global Configuration Mode
+Cisco routers and switches don't have a screen or desktop. You talk to them through a **CLI (Command Line Interface)** running on **Cisco IOS** — accessed via the console port, SSH, or Telnet using a terminal emulator like PuTTY.
 
-Note : _exit_ commnad is used to exit the current Exec mode and move to the lower level of Exec.
+### The Three Exec Modes
 
-#### User Exec Mode
+The CLI is hierarchical. You move up to get more access, and `exit` takes you back down.
 
-User Exec Mode is the initial "entry-point" when you log in. It is restricted to basic monitoring and viewing system status.
-This mode is denoted with ">" sign. _enable_ command is used in this mode to move to the next level (Privileged Exec Mode).
+| Mode            | Prompt            | What You Can Do                 |
+| --------------- | ----------------- | ------------------------------- |
+| User EXEC       | `Router>`         | Basic monitoring only           |
+| Privileged EXEC | `Router#`         | Full view access, exec commands |
+| Global Config   | `Router(config)#` | Change device-wide settings     |
+
+```
+Router>           ← User EXEC (entry point)
+Router> enable
+Router#           ← Privileged EXEC
+Router# conf t
+Router(config)#   ← Global Configuration
+```
+
+> `exit` drops you one level down. `end` or `Ctrl+Z` jumps straight back to Privileged EXEC from anywhere.
+
+---
+
+## Key Concepts
+
+### Enable Password vs Enable Secret
+
+Both restrict access to Privileged EXEC mode, but they're not equal:
+
+- `enable password` — stored in **plain text** in the config file. Anyone who reads the config can see it.
+- `enable secret` — hashed with **MD5** (Type 5). Not reversible. Always use this.
+- If both are set, **`enable secret` wins** — the password is ignored.
+
+### Service Password-Encryption
+
+Running `service password-encryption` applies **Type 7 encryption** to plain-text passwords in the config (like `enable password` and line passwords). It's better than nothing, but Type 7 is a weak proprietary cipher — freely available decryptors exist online. It's a deterrent, not real security.
+
+**The hierarchy in practice:**
+
+```
+enable password  →  plain text (weakest)
++ service password-encryption  →  Type 7 (weak, reversible)
+enable secret  →  MD5 hash (strong, use this)
+```
+
+### Running Config vs Startup Config
+
+|                      | Running Config              | Startup Config        |
+| -------------------- | --------------------------- | --------------------- |
+| **Stored in**        | RAM                         | NVRAM                 |
+| **Active?**          | Yes — right now             | Only at boot          |
+| **Survives reboot?** | No                          | Yes                   |
+| **View**             | `show run`                  | `show startup-config` |
+| **Save**             | `copy run start` or `write` | —                     |
+
+Changes you make are live immediately but **lost on reboot** unless you save them. Always save before powering off.
+
+---
+
+## Lab Walkthrough
+
+### Step 1 — Set Hostnames
 
 ```bash
 Router> enable
+Router# conf t
+Router(config)# hostname R1
+R1(config)#
+
+Switch> enable
+Switch# conf t
+Switch(config)# hostname SW1
+SW1(config)#
 ```
 
-#### Privileged Exec Mode
+The prompt changes immediately to confirm the hostname is set.
 
-Also known as Enable Mode, this level provides full access to all device commands and allows to view detailed configurations.
-This mode is denoted with "#" sign. _configure terminal or conf t_ command is used in this mode to move to the next level (Global Configuration Mode).
+### Step 2 — Set an Unencrypted Enable Password
 
 ```bash
-Router#
+R1(config)# enable password CCNA
+SW1(config)# enable password CCNA
 ```
 
-#### Global Configuration Mode
-
-Used to define settings that apply to the entire device, such as the hostname or routing protocols.
-This mode is denoted with "(config)#" sign.
-
-In this mode we can use _enable password_ or the _enable secret_ command for the user to restrict access to Privileged EXEC mode.
-
-**Enable password vs Enable Secret**
-
-Although both commands serve same purpose but the primary difference is security: _enable password_ stores credentials in plain text, whereas _enable secret_ uses strong, non-reversible cryptographic hashing (like MD5 or SHA-256). _Enable secret_ always overrides _enable password_ when both are configured.
-
-Although The _service password-encryption_ command can be used to encrypt plain-text passwords (like enable or line passwords) stored in the running and startup configurations. It uses a weak, proprietary algorithm (Type 7), which is designed to prevent casual "shoulder surfing" but can be easily reversed or decrypted by attackers.
-
-Note: we can use the _do_ command to execute Privileged EXEC mode commands (like show, clear, or debug) while still inside Global Configuration mode or any of its submodes.
-
-**Running Config vs Startup Config**
-
-Cisco IOS has 2 types of config file:
-
-- Running Config
-- startup-config
-
-The running-config is the active configuration currently stored in RAM. The startup-config is the saved configuration stored in NVRAM. Changes made to the running-config take effect immediately, but will be lost on reboot unless they are saved to the startup-config.
-
-| Feature         | Running Configuration (`running-config`)                                  | Startup Configuration (`startup-config`)                                     |
-| --------------- | ------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| Location        | RAM (Random Access Memory)                                                | NVRAM (Non-Volatile RAM)                                                     |
-| When it's used  | Actively applies settings and changes while the device is operating       | Loaded into RAM during the device boot-up sequence                           |
-| Persistency     | Temporary; disappears if power is lost or the device is rebooted          | Permanent; retains data even without power                                   |
-| Purpose         | To execute current network operations and test new configuration commands | To act as the permanent template that tells the router/switch how to boot up |
-| View Command    | `show running-config` or `show run`                                       | `show startup-config`                                                        |
-| Save Command    | `copy running-config startup-config`                                      | Receives saved data from running-config                                      |
-| Erase Command   | Cannot be directly erased separately                                      | `erase startup-config` or `write erase`                                      |
-| Reload Behavior | Lost after reload if not saved                                            | Loaded automatically during boot                                             |
+### Step 3 — Test the Password
 
 ```bash
-Router(config)# enable password Plain Text password
-Router(config)# enable Secret Strong Secret password
-Router(config)# service password-encryption
-Router(config)# service password-encryption
-
+R1(config)# exit
+R1# exit
+R1> enable
+Password: CCNA      ← typed but not shown on screen
+R1#
 ```
+
+### Step 4 — View the Password in Running Config
+
+```bash
+R1# show running-config
+...
+enable password CCNA     ← visible in plain text
+```
+
+### Step 5 — Encrypt All Current and Future Passwords
+
+```bash
+R1(config)# service password-encryption
+```
+
+### Step 6 — View Running Config Again
+
+```bash
+R1# show running-config
+...
+enable password 7 082D495808     ← now Type 7 encrypted
+```
+
+The `7` indicates the encryption type. The password is now obfuscated, though not truly secure.
+
+### Step 7 — Set a Stronger Encrypted Password
+
+```bash
+R1(config)# enable secret Cisco
+SW1(config)# enable secret Cisco
+```
+
+### Step 8 — Test Which Password Is Active
+
+```bash
+R1(config)# exit
+R1# exit
+R1> enable
+Password: Cisco     ← enable secret takes priority
+R1#
+```
+
+When both `enable password` and `enable secret` are configured, **`enable secret` always overrides**. The `enable password` is effectively ignored.
+
+### Step 9 — View Both Passwords in Running Config
+
+```bash
+R1# show running-config
+...
+enable secret 5 $1$mERr$JO5/FJYhHNW6XZ4./X7310
+enable password 7 0811404F001735160118
+```
+
+- **Type 7** — `enable password` after `service password-encryption`. Weak, reversible.
+- **Type 5** — `enable secret`. MD5 hash. Strong, not reversible.
+
+### Step 10 — Save the Configuration
+
+```bash
+R1# copy running-config startup-config
+Destination filename [startup-config]?   ← press Enter
+Building configuration...
+[OK]
+
+# Shorthand:
+R1# write
+```
+
+Config is now saved to NVRAM and will persist after a reboot.
+
+---
+
+## Lab Output — Screenshots
+
+**CLI commands executed (password setup):**
+
+![CLI Session 1](Images/CLI1.png)
+
+**Running config — passwords shown with encryption types:**
+
+![Running Config](Images/CLI2.png)
+
+**Startup config — confirms save was successful:**
+
+![Startup Config](Images/CLI3.png)
+
+---
+
+## Summary
+
+| Task                         | Command                       |
+| ---------------------------- | ----------------------------- |
+| Enter privileged mode        | `enable`                      |
+| Enter global config          | `conf t`                      |
+| Set hostname                 | `hostname <name>`             |
+| Set plain-text password      | `enable password <pass>`      |
+| Set secure password          | `enable secret <pass>`        |
+| Encrypt plain-text passwords | `service password-encryption` |
+| View active config           | `show running-config`         |
+| View saved config            | `show startup-config`         |
+| Save config                  | `copy run start` or `write`   |
+
+**Key takeaway:** Always use `enable secret` over `enable password`. `service password-encryption` is a weak safeguard — it helps against shoulder-surfing but not against determined attackers. Save your config — RAM doesn't survive a reboot.
+
+---
+
+_Part of my CCNA self-study journey following Jeremy's IT Lab. Labs documented for practical reinforcement and portfolio._
