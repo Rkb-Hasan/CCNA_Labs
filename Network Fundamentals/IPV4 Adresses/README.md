@@ -90,7 +90,7 @@ Historically, addresses were divided into classes based on the **leading bit pat
 
 ### Topology
 
-![Network Topology](topology.png)
+![Network Topology](./Images/topology.png)
 
 | Interface | Connected to | Network         | IP Address Assigned |
 | --------- | ------------ | --------------- | ------------------- |
@@ -137,7 +137,7 @@ R1(config-if)# description ##to SW3##
 R1(config-if)# no shutdown
 ```
 
-![Setting IP and description on G0/1](setting_up_IP___description.png)
+![Setting IP and description on G0/1](./Images/setting%20up%20IP%20&%20description.png)
 
 ---
 
@@ -149,7 +149,7 @@ R1(config-if)# no shutdown
 R1# show ip interface brief
 ```
 
-![show ip interface brief output](show_ip_interfaces.png)
+![show ip interface brief output](./Images/show%20ip%20interfaces.png)
 
 What each column means:
 
@@ -172,7 +172,7 @@ What each column means:
 R1# show interfaces
 ```
 
-![show interfaces output](show_interfaces.png)
+![show interfaces output](./Images/show%20interfaces.png)
 
 Key fields to know from this output:
 
@@ -196,7 +196,7 @@ Key fields to know from this output:
 R1# sh int g0/0
 ```
 
-![show interface g0/0 output](show_interface_gigabit.png)
+![show interface g0/0 output](./Images/show%20interface%20gigabit.png)
 
 Use this when you want detail on a specific interface without scrolling through all of them.
 
