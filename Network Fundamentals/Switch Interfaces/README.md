@@ -123,10 +123,9 @@ This gives a cleaner, more readable summary than `show ip int brief` for switche
 Instead of repeating the same commands on every port, use `interface range`:
 
 ![shutdown unused interfaces](./Images/shutdown%20unused%20interfaces.png)
-
 > You can also specify non-contiguous ports: `interface range fa0/1, fa0/3, fa0/5`
-
 Disabling unused ports is a **security best practice** — it prevents unauthorized devices from plugging in and getting network access.
+
 ---
 
 ### Verifying after configuration
