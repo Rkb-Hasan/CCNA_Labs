@@ -29,7 +29,7 @@ The routing table is the router's map of known networks. Every entry tells the r
 R1# show ip route
 ```
 
-![show ip route — full output with codes legend](./Images/show%20IP%20Route.png)
+<img src="./Images/show%20IP%20Route.png" width="400" alt="show ip route — full output with codes legend">
 
 The codes at the top of the output tell you how each route was learned. The ones that matter right now:
 
@@ -125,7 +125,7 @@ The `[1/0]` that appears next to a static route in the table means Administrativ
 
 ### Topology
 
-![Network Topology](./Images/Topology.png)
+<img src="./Images/Topology.png" width="400" alt="Network Topology">
 
 ### Network Addressing
 
@@ -204,20 +204,17 @@ R3(config)# ip route 192.168.1.0 255.255.255.0 192.168.13.2
 Running `show ip route` on each router to confirm the S entries appeared correctly.
 
 **R1:**
-
-![R1 show ip route](./Images/R1%20IP%20Routes.png)
+<img src="./Images/R1%20IP%20Routes.png" width="400" alt="R1 show ip route">
 
 R1 has C and L entries for its own networks and one S entry for 192.168.3.0/24 pointing via 192.168.12.2. Gateway of last resort is not set — expected.
 
 **R2:**
-
-![R2 show ip route](./Images/R2%20IP%20Routes.png)
+<img src="./Images/R2%20IP%20Routes.png" width="400" alt="R2 show ip route">
 
 R2 has two S entries — one back toward PC1's network via R1, one forward toward PC2's network via R3. Both needed for traffic to flow in both directions.
 
 **R3:**
-
-![R3 show ip route](./Images/R3%20IP%20Routes.png)
+<img src="./Images/R3%20IP%20Routes.png" width="400" alt="R3 show ip route">
 
 R3 has one S entry pointing to 192.168.1.0/24 via R2. Combined with its directly connected 192.168.3.0/24, it can now reach both ends.
 
@@ -229,7 +226,7 @@ R3 has one S entry pointing to 192.168.1.0/24 via R2. Combined with its directly
 PC1> ping 192.168.3.1
 ```
 
-![Ping from PC1 to PC2 — successful](./Images/Ping%20reply%20from%20PC1%20to%20PC2.png)
+<img src="./Images/Ping%20reply%20from%20PC1%20to%20PC2.png" width="400" alt="Ping from PC1 to PC2 — successful">
 
 4 out of 4 replies, 0% packet loss, TTL 125.
 
