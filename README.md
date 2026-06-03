@@ -1,3 +1,3 @@
-## Text Formatting
+## CCNA V1.1
 
-Markdown makes it easy to format text. You can write in **bold**, _italic_, or ~~strikethrough~~. Combine them for **_bold italic_** text. Use `inline code` for technical terms.
+In this repo i will document **Labs & Theory** related to the **CCNA v1.1** exam following the **_Jeremy's IT Labs _**.
