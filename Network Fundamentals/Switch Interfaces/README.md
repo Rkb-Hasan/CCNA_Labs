@@ -116,32 +116,17 @@ This gives a cleaner, more readable summary than `show ip int brief` for switche
 
 ### Configuring a single interface
 
-```
-SW1(config)# interface fastEthernet 0/1
-SW1(config-if)# description ## to PC1 ##
-SW1(config-if)# speed 100
-SW1(config-if)# duplex full
-SW1(config-if)# no shutdown
-```
-
 ![Manual configuration](./Images/manual%20configuration%20&%20description.png)
 
 ### Configuring a range of interfaces at once
 
 Instead of repeating the same commands on every port, use `interface range`:
 
-```
-SW1(config)# interface range fastEthernet 0/3 - 24
-SW1(config-if-range)# description ## unused ##
-SW1(config-if-range)# shutdown
-```
+![shutdown unused interfaces](./Images/shutdown%20unused%20interfaces.png)
 
 > You can also specify non-contiguous ports: `interface range fa0/1, fa0/3, fa0/5`
 
 Disabling unused ports is a **security best practice** — it prevents unauthorized devices from plugging in and getting network access.
-
-![shutdown unused interfaces](./Images/shutdown%20unused%20interfaces.png)
-
 ---
 
 ### Verifying after configuration
