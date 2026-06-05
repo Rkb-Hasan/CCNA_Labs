@@ -3,7 +3,7 @@
 **Date:** 2026-05-24 | **Module:** Network Fundamentals  
 **Source:** Jeremy's IT Lab
 
-> No lab was done for this chapter. This README is based entirely on the theory from the video. The header fields become more meaningful in context — the TTL field in particular connects directly to what was observed in [Day 11](../Day_11_Static_Routing/README.md), where a TTL of 125 confirmed the packet crossed exactly 3 router hops.
+> No lab was done for this chapter. This README is based entirely on the theory. The header fields become more meaningful in context — the TTL field in particular connects directly to what was observed in [Day 11](../Static%20Routing/README.md), where a TTL of 125 confirmed the packet crossed exactly 3 router hops.
 
 ---
 
