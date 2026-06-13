@@ -277,7 +277,7 @@ When PC1 pings PC3 for the first time:
 
 ## What I didn't fully understand
 
-- [ ] Why `Vlan1` shows up on a router's `show ip int brief` — need to revisit
+- &#x2705; Why `Vlan1` shows up on a router's `show ip int brief` — need to revisit
 - [ ] Exactly what ARPA encapsulation means vs other types
 - [ ] The full ICMP/ARP exchange in simulation mode — only partially observed
 
